@@ -3,6 +3,7 @@ package com.blablacar.backend.Security;
 import com.blablacar.backend.Model.Utilisateur;
 import com.blablacar.backend.Repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,5 +20,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (utilisateur == null) {
             throw new UsernameNotFoundException("Utilisateur introuvable");
         }
+
+        return User.withUsername(utilisateur.getEmail())
+                .password(utilisateur.getMdp())
+                .roles(utilisateur.getRole().name())
+                .build();
     }
 }
